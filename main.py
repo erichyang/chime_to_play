@@ -14,7 +14,7 @@ def draw_window(chimes):
     screen.fill(WHITE)
 
     for chime in chimes:
-        screen.blit(chime.surf, chime.rect)
+        screen.blit(chime.img, chime.cords)
     pygame.display.flip()
     pygame.display.update()
 
@@ -30,7 +30,7 @@ def main():
                 run = False
         draw_window(chimes)
         for chime in chimes:
-            
+            chime.update(pygame.key.get_pressed())
 
     pygame.quit()
 
