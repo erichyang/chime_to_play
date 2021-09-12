@@ -33,6 +33,10 @@ song_note = [(e6, e6, e6, d6, e6, g6, e6, d6, d6, d6, c6, d6, g6),
              (e6, e6, g6, e6, g6, e6, g6, d6, d6, e6, d6, e6, d6,
               e6, d6, g6, d6, e6, g6, e6, e6, g6, d6, c6),
              (c6, d6, g6, e6, g6, a6, g6, a6, e6, d6, e6, d6, c6)]
+flattened = [item for sublist in song_note for item in sublist]
+
+
+num_to_note = [c6, d6, e6, g6, a6]
 
 
 class Challenge:
@@ -40,41 +44,62 @@ class Challenge:
         self.score = 0
         self.track = 0
         self.index = 0
+        self.length = 0
+        self.current = []
+        self.playing = False
+        self.play_next()
 
-    def add_point(self):
+    def played_note(self, chime_num):
+        self.current.append(num_to_note[chime_num])
+        if len(self.current) < self.length:
+            return True
+
+        for index, note in enumerate(self.current):
+            if flattened[index] is not note:
+                return False
         self.score += 1
         if len(song_note[self.track]) == self.index:
             self.track += 1
             self.index = 0
         else:
             self.index += 1
+        return True
 
     def play_next(self):
         event = threading.Event()
-        thread = threading.Thread(target=loop, args=(event, self.track, self.index))
+        print(self.track, self.index)
+        thread = threading.Thread(target=self.loop, args=(event, self.track, self.index))
         thread.start()
 
-
-def loop(event, track, index):
-    song = song_note[track]
-    wait = 0.9
-    if index == 3:
-        wait = 0.45
-    for note in range(0, index):
-        song[note]()
-        event.wait(wait)
+    def loop(self, event, track, index):
+        self.playing = True
+        print(track, index)
+        song = song_note[track]
+        wait = 0.9
+        if track == 2:
+            wait = 0.45
+        self.length = 0
+        if track > 0:
+            for m in range(0, track):
+                for note in song_note[m]:
+                    note()
+                    event.wait(0.9)
+                    self.length += 1
+        for note in range(0, index):
+            song[note]()
+            event.wait(wait)
+            self.length += 1
+        self.playing = False
 
 
 def main():
-    event = threading.Event()
-    thread = threading.Thread(target=loop, args=(event, 0))
-    thread.start()
+    # ch = Challenge()
+    # ch.play_next()
+    # print(ch.score, ch.track, ch.index)
+    # time.sleep(10)
+    pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/wind_and_pad.mp3'), loops=-1)
+    time.sleep(10)
 
 
 if __name__ == '__main__':
-    ch = Challenge()
-    ch.play_next()
-    ch.add_point()
-    ch.play_next()
-    time.sleep(10)
-
+    main()

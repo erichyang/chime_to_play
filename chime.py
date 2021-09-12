@@ -26,6 +26,7 @@ class Chime(pygame.sprite.Sprite):
 
         self.rect = pygame.Rect(self.cords[0], self.cords[1], self.width, self.height)
 
+
         self.moment_of_inertia = self.mass * (self.width * self.width + self.height * self.height) / 12
         self.position = [300, 300]
         self.linear_velocity = 0
@@ -34,20 +35,20 @@ class Chime(pygame.sprite.Sprite):
         self.force = [0, 0]
         self.torque = 0
 
-        self.rect = self.img.get_rect(center=(self.position[0], self.position[1]))
-        self.mask = pygame.mask.from_surface(self.img)
+        #self.rect = self.img.get_rect(center=(self.position[0], self.position[1]))
+        # self.mask = pygame.mask.from_surface(self.img)
 
         self.velocity = 0
         self.Aacc = 0
 
     # Draws all chimes
-    def draw_chimes(self, screen, topleft, angle):
-        rotated_image = pygame.transform.rotate(self.img, angle)
-        new_rect = rotated_image.get_rect(center=self.img.get_rect(topleft=topleft).center)
-        screen.blit(rotated_image, new_rect)
-        self.rect = rotated_image.get_rect(center=self.img.get_rect(topleft=topleft).center)
-        self.mask = pygame.mask.from_surface(rotated_image)
-    # Initialize rigid bodies and give random parameters
+    # def draw_chimes(self, screen, topleft, angle):
+    #     # rotated_image = pygame.transform.rotate(self.img, angle)
+    #     # new_rect = rotated_image.get_rect(center=self.img.get_rect(topleft=topleft).center)
+    #     # screen.blit(rotated_image, new_rect)
+    #     self.rect = rotated_image.get_rect(center=self.img.get_rect(topleft=topleft).center)
+    #     self.mask = pygame.mask.from_surface(rotated_image)
+    # # Initialize rigid bodies and give random parameters
     def init_chimes(self):
         self.position = [300, 300]
         self.angle = random.randint(0, 360) / 360 * math.pi * 2
@@ -67,7 +68,7 @@ class Chime(pygame.sprite.Sprite):
     def run_sim(self, screen):
         dt = 1
         self.computeFAT()
-        self.draw_chimes(screen, (self.position[0], self.position[1]), self.angle)
+        # self.draw_chimes(screen, (self.position[0], self.position[1]), self.angle)
         linear_acceleration = [self.force[0] / self.mass, self.force[1] / self.mass]
         self.linear_velocity[0] += linear_acceleration[0] * dt
         self.linear_velocity[1] += linear_acceleration[1] * dt
@@ -77,13 +78,3 @@ class Chime(pygame.sprite.Sprite):
         self.angular_velocity += angular_acceleration * dt
         self.angle += self.angular_velocity * dt
         self.angle += 1
-    # Move the sprite based on user key presses
-    def update(self, pressed_keys):
-        if pressed_keys[K_UP]:
-            self.cords[1] -= 5
-        if pressed_keys[K_DOWN]:
-            self.cords[1] += 5
-        if pressed_keys[K_LEFT]:
-            self.cords[0] -= 5
-        if pressed_keys[K_RIGHT]:
-            self.cords[0] += 5
