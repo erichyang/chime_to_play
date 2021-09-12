@@ -24,12 +24,7 @@ def draw_window(chimes):
 def main():
     clock = pygame.time.Clock()
     run = True
-    chime1 = Chime()
-    chime2 = Chime()
-    chime3 = Chime()
-    chime4 = Chime()
-    chime5 = Chime()
-    chimes = [chime1, chime2, chime3, chime4, chime5]
+    chimes = [Chime(), Chime(), Chime(), Chime(), Chime()]
     for chime in chimes:
         chime.init_chimes()
     while run:

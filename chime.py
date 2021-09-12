@@ -28,8 +28,10 @@ class Chime(pygame.sprite.Sprite):
         self.torque = 0
 
     # Draws all chimes
-    def draw_chimes(self, screen):
-        pygame.draw.rect(screen, (0, 0, 0), (self.position[0], self.position[1], self.width, self.height))
+    def draw_chimes(self, screen, image, topleft, angle):
+        rotated_image = pygame.transform.rotate(image, angle)
+        new_rect = rotated_image.get_rect(center=image.get_rect(topleft=topleft).center)
+        screen.blit(rotated_image, new_rect)
 
     #Initialize rigid bodies and give random parameters
     def init_chimes(self):
@@ -44,14 +46,14 @@ class Chime(pygame.sprite.Sprite):
         self.moment_of_inertia = self.mass * (self.width * self.width + self.height * self.height) / 12
 
     def computeFAT(self):
-        self.force = [0, 1]
+        self.force = [1, -5]
         r = [self.width / 2, self.height / 2]
         self.torque = r[0] * self.force[1] - r[1] * self.force[0]
 
     def run_sim(self, screen):
         dt = 1
         self.computeFAT()
-        self.draw_chimes(screen)
+        self.draw_chimes(screen, self.img, (self.position[0], self.position[1]), self.angle)
         linear_acceleration = [self.force[0] / self.mass, self.force[1] / self.mass]
         self.linear_velocity[0] += linear_acceleration[0] * dt
         self.linear_velocity[1] += linear_acceleration[1] * dt
