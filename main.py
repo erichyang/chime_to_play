@@ -97,6 +97,7 @@ def main():
 
                     if button_1.collidepoint((mx, my)):
                         game_state = 'challenge'
+                        score = 0
                         pygame.mixer.Channel(7).stop()
                         pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/wind_and_pad.mp3'), loops=-1)
                         challenge = Challenge()
