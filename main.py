@@ -117,6 +117,7 @@ def main():
                     if button_4.collidepoint((mx, my)):
                         game_state = 'main'
                         # background music in main_menu
+                        pygame.mixer.stop()
                         pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/twinkle_song.mp3'), loops=-1)
                         continue
 
