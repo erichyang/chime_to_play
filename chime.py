@@ -9,15 +9,19 @@ from pygame import K_UP, K_DOWN, K_LEFT, K_RIGHT
 
 class Chime(pygame.sprite.Sprite):
 
-    def __init__(self):
+    def __init__(self, num):
         super(Chime, self).__init__()
         self.surf = pygame.Surface((50, 100))
         self.surf.fill((255, 0, 255))
         self.surf.set_colorkey((255, 0, 255))
-        self.cords = [250, 500]
-        self.img = pygame.image.load(os.path.join('assets', 'chime1.png'))
+        sound = ['A', 'C', 'D', 'E', 'G']
+        self.id = num
+        self.sound = f'./assets/audio/{sound[num]}6.mp3'
+        num += 1
+        self.img = pygame.image.load(os.path.join('assets', f'chime{num}.png'))
         self.width = self.img.get_size()[0]
         self.height = self.img.get_size()[1]
+        self.cords = [900-(self.width+100)*(5-num), 300]
         self.mass = self.width * self.height / 100  # Change based on Chime size
 
         self.rect = pygame.Rect(self.cords[0], self.cords[1], self.width, self.height)

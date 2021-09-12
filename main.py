@@ -42,7 +42,7 @@ def main():
     clock = pygame.time.Clock()
     pygame.mouse.set_cursor((8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0))
     run = True
-    chimes = [Chime(), Chime(), Chime(), Chime(), Chime()]
+    chimes = [Chime(0), Chime(1), Chime(2), Chime(3), Chime(4)]
 
     interactables = pygame.sprite.Group()
 
@@ -116,10 +116,11 @@ def main():
             draw_text('free play', gen_font(30), (0, 0, 0), screen, 20, 20)
         cursor.update(mouse_pos=pygame.mouse.get_pos())
         draw_window(game_state)
-        if pygame.sprite.spritecollideany(cursor, interactables):
+        collisions = pygame.sprite.spritecollide(cursor, interactables, dokill=False)
+        if len(collisions) > 0:
             if game_state != 'main' and not cursor_on:
                 cursor_on = True
-                c6()
+                pygame.mixer.Channel(collisions[0].id).play(pygame.mixer.Sound(collisions[0].sound))
         else:
             cursor_on = False
 
