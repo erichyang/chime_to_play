@@ -66,6 +66,9 @@ def main():
     # main, challenge, free
     game_state = 'main'
     cursor_on = False
+    main_bg = pygame.image.load("./assets/main_menu_bg.png")
+    game_bg = pygame.image.load("./assets/game_bg.png")
+    header = pygame.image.load('./assets/chime_header.png')
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -96,20 +99,14 @@ def main():
                         continue
 
         if game_state == 'main':
-            bg = pygame.image.load("./assets/main_menu_bg.png")
-            screen.fill((0, 0, 0))
-            screen.blit(bg, bg.get_rect())
+            screen.blit(main_bg, main_bg.get_rect())
         elif game_state == 'challenge':
-            screen.fill((0, 0, 0))
-            bg = pygame.image.load("./assets/game_bg.png")
-            header = pygame.transform.scale(pygame.image.load('./assets/chime_header.png'), (900, 900))
-            screen.blit(bg, bg.get_rect())
-            screen.blit(header, header.get_rect())
+            screen.blit(game_bg, game_bg.get_rect())
+            screen.blit(header, ((WIDTH-header.get_width())/2, 0))
             draw_text('challenge', gen_font(30), (0, 0, 0), screen, 20, 20)
         elif game_state == 'free':
-            screen.fill((0, 0, 0))
-            bg = pygame.image.load("./assets/game_bg.png")
-            screen.blit(bg, bg.get_rect())
+            screen.blit(game_bg, game_bg.get_rect())
+            screen.blit(header, ((WIDTH - header.get_width()) / 2, 0))
             draw_text('free play', gen_font(30), (0, 0, 0), screen, 20, 20)
         cursor.update(mouse_pos=pygame.mouse.get_pos())
         draw_window(game_state)
