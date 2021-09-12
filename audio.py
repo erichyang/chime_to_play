@@ -63,6 +63,8 @@ class Challenge:
         else:
             self.index += 1
         self.current = []
+        if self.score >= 63:
+            return False
         self.play_next()
         return True
 
