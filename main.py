@@ -64,6 +64,8 @@ def main():
                         chime.run_sim(screen)
                     if challenge.playing:
                         draw_text(f'LISTEN', gen_font(50), (0, 0, 0), screen, 530, 225)
+                else:
+                    draw_text(f'Game Over', gen_font(100), (0, 0, 0), screen, WIDTH/2 - 175, HEIGHT/2)
             else:
                 for chime in chimes:
                     screen.blit(chime.img, chime.cords)
@@ -151,7 +153,8 @@ def main():
                     challenge = None
                     pygame.display.flip()
 
-                score = challenge.score
+                if challenge is not None:
+                    score = challenge.score
             elif game_state == 'free' and not cursor_on:
                 cursor_on = True
                 num = collisions[0].id
