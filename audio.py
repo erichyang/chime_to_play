@@ -36,7 +36,7 @@ song_note = [(e6, e6, e6, d6, e6, g6, e6, d6, d6, d6, c6, d6, g6),
 flattened = [item for sublist in song_note for item in sublist]
 
 
-num_to_note = [c6, d6, e6, g6, a6]
+num_to_note = [a6, c6, d6, e6, g6]
 
 
 class Challenge:
@@ -53,9 +53,9 @@ class Challenge:
         self.current.append(num_to_note[chime_num])
         if len(self.current) < self.length:
             return True
-
         for index, note in enumerate(self.current):
             if flattened[index] is not note:
+                self.current = []
                 return False
         self.score += 1
         if len(song_note[self.track]) == self.index:
@@ -63,17 +63,18 @@ class Challenge:
             self.index = 0
         else:
             self.index += 1
+        self.current = []
+        self.play_next()
         return True
 
     def play_next(self):
         event = threading.Event()
-        print(self.track, self.index)
         thread = threading.Thread(target=self.loop, args=(event, self.track, self.index))
         thread.start()
 
     def loop(self, event, track, index):
         self.playing = True
-        print(track, index)
+        event.wait(1.5)
         song = song_note[track]
         wait = 0.9
         if track == 2:
@@ -82,10 +83,12 @@ class Challenge:
         if track > 0:
             for m in range(0, track):
                 for note in song_note[m]:
+                    print(note.__name__)
                     note()
                     event.wait(0.9)
                     self.length += 1
-        for note in range(0, index):
+        for note in range(0, index+1):
+            print(song[note].__name__)
             song[note]()
             event.wait(wait)
             self.length += 1

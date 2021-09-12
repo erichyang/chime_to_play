@@ -144,12 +144,10 @@ def main():
                 cursor_on = True
                 num = collisions[0].id
                 pygame.mixer.Channel(num).play(pygame.mixer.Sound(collisions[0].sound))
-                if challenge.played_note(num):
-                    challenge.play_next()
-                    score = challenge.score
-                else:
-                    score = challenge.score
-                    # challenge = None
+                print(num)
+                score = challenge.score
+                if not challenge.played_note(num):
+                    challenge = None
                     pygame.display.flip()
             elif game_state == 'free' and not cursor_on:
                 cursor_on = True
