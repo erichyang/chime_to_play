@@ -113,10 +113,12 @@ def main():
             screen.blit(game_bg, game_bg.get_rect())
             screen.blit(header, ((WIDTH-header.get_width())/2, 0))
             draw_text('challenge', gen_font(30), (0, 0, 0), screen, 20, 20)
+            pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/wind_and_pad.mp3'), loops=-1)
         elif game_state == 'free':
             screen.blit(game_bg, game_bg.get_rect())
             screen.blit(header, ((WIDTH - header.get_width()) / 2, 0))
             draw_text('free play', gen_font(30), (0, 0, 0), screen, 20, 20)
+            pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/wind_and_pad.mp3'), loops=-1)
         cursor.update(mouse_pos=pygame.mouse.get_pos())
         draw_window(game_state)
         collisions = pygame.sprite.spritecollide(cursor, interactables, dokill=False)
