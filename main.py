@@ -65,6 +65,8 @@ def main():
 
     # main, challenge, free
     game_state = 'main'
+    pygame.mixer.music.load('./assets/twinkle_song.mp3')
+    pygame.mixer.music.play(-1)
     cursor_on = False
     main_bg = pygame.image.load("./assets/main_menu_bg.png")
     game_bg = pygame.image.load("./assets/game_bg.png")
@@ -83,9 +85,11 @@ def main():
                     button_3 = pygame.Rect(WIDTH / 2 - 75, HEIGHT / 2 + 225, 150, 75)
                     if button_1.collidepoint((mx, my)):
                         game_state = 'challenge'
+                        pygame.mixer.music.stop()
                         continue
                     if button_2.collidepoint((mx, my)):
                         game_state = 'free'
+                        pygame.mixer.music.stop()
                         continue
                     if button_3.collidepoint((mx, my)):
                         run = False
@@ -100,6 +104,9 @@ def main():
 
         if game_state == 'main':
             screen.blit(main_bg, main_bg.get_rect())
+            # background music in main_menu
+            pygame.mixer.music.load('./assets/twinkle_song.mp3')
+            pygame.mixer.music.play(-1)
         elif game_state == 'challenge':
             screen.blit(game_bg, game_bg.get_rect())
             screen.blit(header, ((WIDTH-header.get_width())/2, 0))
