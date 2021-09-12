@@ -39,8 +39,9 @@ class ball(object):
         pygame.draw.circle(bg, black, (self.x, self.y), self.radius)
         pygame.draw.circle(bg, Dark_red, (self.x, self.y), self.radius - 2)
         img = pygame.image.load(os.path.join('assets', f'chime{1}.png'))
+        height = img.get_size()[1]
         rotated_image = pygame.transform.rotate(img, angle * 180 / math.pi)
-        new_rect = rotated_image.get_rect(center=img.get_rect(topleft=(width/2, 100)).center)
+        new_rect = rotated_image.get_rect(center=((width / 2) + (math.sin(angle) * (height / 2)), (math.cos(angle) * (height / 2)) + 25))
         background.blit(rotated_image, new_rect)
 
 def grid():  # Draw a grid behind the pendulum
@@ -49,7 +50,6 @@ def grid():  # Draw a grid behind the pendulum
         for y in range(50, height, 50):
             pygame.draw.lines(background, gray, False, [(0, y), (width, y)])
     pygame.draw.circle(background, black, (int(width / 2), 50), 5)
-
 
 def angle_Length():  # Send back the length and angle at the first click on screen
     length = math.sqrt(math.pow(pendulum.x - width / 2, 2) + math.pow(pendulum.y - 50, 2))
@@ -85,10 +85,6 @@ while not Out:
 
 
     if acceleration:  # Increase acceleration and damping in the pendulum moviment
-        img = pygame.image.load(os.path.join('assets', f'chime{1}.png'))
-        rotated_image = pygame.transform.rotate(img, 90)
-        new_rect = rotated_image.get_rect(center=img.get_rect(topleft=(100, 200)).center)
-        background.blit(rotated_image, new_rect)
         Aacc = -0.005 * math.sin(angle)
         vel += Aacc
         vel *= 0.99  # damping factor

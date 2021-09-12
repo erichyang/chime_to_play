@@ -37,6 +37,9 @@ class Chime(pygame.sprite.Sprite):
         self.rect = self.img.get_rect(center=(self.position[0], self.position[1]))
         self.mask = pygame.mask.from_surface(self.img)
 
+        self.velocity = 0
+        self.Aacc = 0
+
     # Draws all chimes
     def draw_chimes(self, screen, topleft, angle):
         rotated_image = pygame.transform.rotate(self.img, angle)
