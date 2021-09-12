@@ -22,24 +22,29 @@ class Chime(pygame.sprite.Sprite):
         self.linear_velocity = 'list'
         self.angle = 0
         self.angular_velocity = 0
-        self.force = 'list'
+        self.force = [0, 0]
         self.torque = 0
 
     # Draws all chimes
     def draw_chimes(self, screen):
-        pygame.draw.rect(screen, (0, 0, 0), (self.position[0]-self.width/2, self.position[1],))
+        pygame.draw.rect(screen, (0, 0, 0), (self.position[0], self.position[1], self.width, self.height))
 
     #Initialize rigid bodies and give random parameters
-    def init_chimes(self,):
-        self.position = (random.randint(50, 750), random.randint(50,750))
-        self.angle = random.randint(0,360)/360 * math.pi * 2
-        self.linear_velocity = [0,0]
+    def init_chimes(self):
+        self.position = (random.randint(50, 750), random.randint(50, 750))
+        self.angle = random.randint(0, 360)/360 * math.pi * 2
+        self.linear_velocity = [0, 0]
         self.angular_velocity = 0
 
         self.mass = 10
         self.width = 10
         self.height = 10
         self.moment_of_inertia = self.mass * (self.width * self.width + self.height * self.height) / 12
+
+    def computeFAT(self):
+        self.force = [0, 100]
+        r = [self.width / 2 , self.height / 2]
+        self.torque = r[0] * self.force[1] - r[1] * self.force[0]
 
 
     # Move the sprite based on user key presses

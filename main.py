@@ -17,12 +17,16 @@ def draw_window(chimes):
         screen.blit(chime.img, chime.cords)
         chime.update(pygame.key.get_pressed())
         chime.draw_chimes(screen)
+        chime.computeFAT()
+
     pygame.display.flip()
     pygame.display.update()
 def main():
     clock = pygame.time.Clock()
     run = True
-    chimes = [Chime()]
+    chime1 = Chime()
+    chime2 = Chime()
+    chimes = [chime1, chime2, Chime(), Chime(), Chime()]
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
