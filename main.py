@@ -56,14 +56,16 @@ def main():
     def draw_window(state):
         if state != 'main':
             if state == 'challenge':
-                draw_text(f'SCORE - {score}', gen_font(50), (0, 0, 0), screen, 0, 300)
+                draw_text(f'SCORE - {score}', gen_font(50), (0, 0, 0), screen, WIDTH - 225, HEIGHT - 50)
                 if challenge is not None:
                     for chime in chimes:
                         screen.blit(chime.img, chime.cords)
                         chime.update(pygame.key.get_pressed())
                         chime.run_sim(screen)
                     if challenge.playing:
-                        draw_text(f'LISTEN', gen_font(50), (0, 0, 0), screen, 500, 200)
+                        draw_text(f'LISTEN', gen_font(50), (0, 0, 0), screen, 530, 225)
+                else:
+                    draw_text(f'Game Over', gen_font(100), (0, 0, 0), screen, WIDTH/2 - 175, HEIGHT/2)
             else:
                 for chime in chimes:
                     screen.blit(chime.img, chime.cords)
@@ -97,6 +99,7 @@ def main():
 
                     if button_1.collidepoint((mx, my)):
                         game_state = 'challenge'
+                        score = 0
                         pygame.mixer.Channel(7).stop()
                         pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/wind_and_pad.mp3'), loops=-1)
                         challenge = Challenge()
@@ -116,6 +119,7 @@ def main():
                     if button_4.collidepoint((mx, my)):
                         game_state = 'main'
                         # background music in main_menu
+                        pygame.mixer.stop()
                         pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/twinkle_song.mp3'), loops=-1)
                         continue
 
@@ -144,13 +148,13 @@ def main():
                 cursor_on = True
                 num = collisions[0].id
                 pygame.mixer.Channel(num).play(pygame.mixer.Sound(collisions[0].sound))
-                if challenge.played_note(num):
-                    challenge.play_next()
-                    score = challenge.score
-                else:
-                    score = challenge.score
-                    # challenge = None
+                print(num)
+                if not challenge.played_note(num):
+                    challenge = None
                     pygame.display.flip()
+
+                if challenge is not None:
+                    score = challenge.score
             elif game_state == 'free' and not cursor_on:
                 cursor_on = True
                 num = collisions[0].id

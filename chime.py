@@ -16,6 +16,7 @@ class Chime(pygame.sprite.Sprite):
         self.surf.set_colorkey((255, 0, 255))
         sound = ['A', 'C', 'D', 'E', 'G']
         self.id = num
+        print(num, sound[num])
         self.sound = f'./assets/audio/{sound[num]}6.mp3'
         num += 1
         self.img = pygame.image.load(os.path.join('assets', f'chime{num}.png'))
