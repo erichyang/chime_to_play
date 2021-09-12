@@ -124,6 +124,9 @@ def main():
             if game_state != 'main' and not cursor_on:
                 cursor_on = True
                 pygame.mixer.Channel(collisions[0].id).play(pygame.mixer.Sound(collisions[0].sound))
+                num = collisions[0].id
+                pygame.mixer.Channel(num).play(pygame.mixer.Sound(collisions[0].sound))
+
         else:
             cursor_on = False
 
