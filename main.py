@@ -56,14 +56,14 @@ def main():
     def draw_window(state):
         if state != 'main':
             if state == 'challenge':
-                draw_text(f'SCORE - {score}', gen_font(50), (0, 0, 0), screen, 0, 300)
+                draw_text(f'SCORE - {score}', gen_font(50), (0, 0, 0), screen, WIDTH - 225, HEIGHT - 50)
                 if challenge is not None:
                     for chime in chimes:
                         screen.blit(chime.img, chime.cords)
                         chime.update(pygame.key.get_pressed())
                         chime.run_sim(screen)
                     if challenge.playing:
-                        draw_text(f'LISTEN', gen_font(50), (0, 0, 0), screen, 500, 200)
+                        draw_text(f'LISTEN', gen_font(50), (0, 0, 0), screen, 530, 225)
             else:
                 for chime in chimes:
                     screen.blit(chime.img, chime.cords)
@@ -147,10 +147,11 @@ def main():
                 num = collisions[0].id
                 pygame.mixer.Channel(num).play(pygame.mixer.Sound(collisions[0].sound))
                 print(num)
-                score = challenge.score
                 if not challenge.played_note(num):
                     challenge = None
                     pygame.display.flip()
+
+                score = challenge.score
             elif game_state == 'free' and not cursor_on:
                 cursor_on = True
                 num = collisions[0].id

@@ -35,7 +35,6 @@ song_note = [(e6, e6, e6, d6, e6, g6, e6, d6, d6, d6, c6, d6, g6),
              (c6, d6, g6, e6, g6, a6, g6, a6, e6, d6, e6, d6, c6)]
 flattened = [item for sublist in song_note for item in sublist]
 
-
 num_to_note = [a6, c6, d6, e6, g6]
 
 
