@@ -14,6 +14,7 @@ length = 1  # the length between the ball and the support
 angle = 0  # the angle that you begin when click in window
 vel = 0  # velocity that angle is increased and damped
 Aacc = 0  # acceleration
+img = pygame.image.load(os.path.join('assets', f'chime{1}.png'))
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Chime to Play!")
@@ -39,17 +40,17 @@ class ball(object):
         self.y = XY[1]
         self.radius = radius
 
-    def draw(self, bg, ang):  # Draw circle and line based on XY coordinates
-        #pygame.draw.lines(bg, black, False, [(width / 2, 50), (self.x, self.y)], 2)
+    def draw(self, bg, ang, num):  # Draw circle and line based on XY coordinates
         img = pygame.image.load(os.path.join('assets', f'chime{1}.png'))
+        pygame.draw.lines(bg, black, False, [(1100-(img.get_size()[0]+100)*(5-0), 250), (self.x, self.y)], 2)
         height = img.get_size()[1]
         rotated_image = pygame.transform.rotate(img, angle * 180 / math.pi)
-        new_rect = rotated_image.get_rect(center=((WIDTH / 2) + (math.sin(angle) * (height / 2)), (math.cos(angle) * (height / 2)) + 100))
+        new_rect = rotated_image.get_rect(center=(1100-(img.get_size()[0]+100)*(5-num) + (math.sin(angle) * (height / 2)), (math.cos(angle) * (height / 2)) + 300))
         screen.blit(rotated_image, new_rect)
 
 def angle_Length():  # Send back the length and angle at the first click on screen
-    length = math.sqrt(math.pow(pendulum.x - WIDTH / 2, 2) + math.pow(pendulum.y - 50, 2))
-    angle = math.asin((pendulum.x - WIDTH / 2) / length)
+    length = math.sqrt(math.pow(pendulum.x - 1100-(img.get_size()[0]+100)*(5-0), 2) + math.pow(pendulum.y - 250, 2))
+    angle = math.asin((pendulum.x - 250) / length)
     return angle, length
 
 
@@ -59,12 +60,19 @@ def get_path(first_angle, length):  # with angle and length calculate x and y po
 
 
 def redraw():  # Clean up the screen and start a new grid and new frame of pendulum with new coordinates
-    pendulum.draw(screen, angle)
+    pendulum.draw(screen, angle,0)
     pygame.display.update()
+    pendulum1.draw(screen, angle, 1)
+    pendulum2.draw(screen, angle, 2)
+    pendulum3.draw(screen, angle, 3)
+    pendulum4.draw(screen, angle, 4)
 
 
-pendulum = ball((int(WIDTH / 2), -300), 250)  # I start the class with some random coordinates
-
+pendulum = ball((int(WIDTH / 2), -300), 200)  # I start the class with some random coordinates
+pendulum1 = ball((int(WIDTH / 2), -200), 250)
+pendulum2 = ball((int(WIDTH / 2), -100), 250)
+pendulum3 = ball((int(WIDTH / 2), 0), 250)
+pendulum4= ball((int(WIDTH / 2), 100), 250)
 class Cursor(pygame.sprite.Sprite):
 
     def __init__(self):
@@ -161,6 +169,10 @@ while not Out:
                 elif game_state in ['challenge', 'free']:
                     mx, my = pygame.mouse.get_pos()
                     pendulum = ball(pygame.mouse.get_pos(), 15)  # or
+                    pendulum1 = ball(pygame.mouse.get_pos(), 5)
+                    pendulum2 = ball(pygame.mouse.get_pos(), 5)
+                    pendulum3 = ball(pygame.mouse.get_pos(), 5)
+                    pendulum4 = ball(pygame.mouse.get_pos(), 5)
                     angle, length = angle_Length() # click the mouse button
                     # angle = math.sin(math.pi/10)
                     acceleration = True
