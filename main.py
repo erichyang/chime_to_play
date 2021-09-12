@@ -1,6 +1,6 @@
 import pygame
 
-from audio import c6
+from audio import c6, Challenge
 from chime import Chime
 
 WIDTH, HEIGHT = 1200, 900
@@ -47,6 +47,7 @@ def main():
     interactables = pygame.sprite.Group()
 
     cursor = Cursor()
+    score = 0
 
     for chime in chimes:
         interactables.add(chime)
@@ -54,11 +55,21 @@ def main():
 
     def draw_window(state):
         if state != 'main':
-            for chime in chimes:
-                screen.blit(chime.img, chime.cords)
-                chime.update(pygame.key.get_pressed())
-                chime.run_sim(screen)
-
+            if state == 'challenge':
+                draw_text(f'SCORE - {score}', gen_font(50), (0, 0, 0), screen, 0, 300)
+                if challenge is not None:
+                    for chime in chimes:
+                        screen.blit(chime.img, chime.cords)
+                        chime.update(pygame.key.get_pressed())
+                        chime.run_sim(screen)
+                    if challenge.playing:
+                        draw_text(f'LISTEN', gen_font(50), (0, 0, 0), screen, 500, 200)
+            else:
+                for chime in chimes:
+                    screen.blit(chime.img, chime.cords)
+                    chime.update(pygame.key.get_pressed())
+                    pygame.draw.rect(chime.surf, (0, 0, 0), chime.rect)
+                    chime.run_sim(screen)
         screen.blit(cursor.surf, cursor.rect)
         pygame.display.flip()
         pygame.display.update()
@@ -70,6 +81,7 @@ def main():
     main_bg = pygame.image.load("./assets/main_menu_bg.png")
     game_bg = pygame.image.load("./assets/game_bg.png")
     header = pygame.image.load('./assets/chime_header.png')
+    challenge = None
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -85,11 +97,14 @@ def main():
 
                     if button_1.collidepoint((mx, my)):
                         game_state = 'challenge'
-                        pygame.mixer.stop()
+                        pygame.mixer.Channel(7).stop()
+                        pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/wind_and_pad.mp3'), loops=-1)
+                        challenge = Challenge()
                         continue
                     if button_2.collidepoint((mx, my)):
                         game_state = 'free'
-                        pygame.mixer.stop()
+                        pygame.mixer.Channel(7).stop()
+                        pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/wind_and_pad.mp3'), loops=-1)
                         continue
                     if button_3.collidepoint((mx, my)):
                         run = False
@@ -113,22 +128,33 @@ def main():
             screen.blit(game_bg, game_bg.get_rect())
             screen.blit(header, ((WIDTH-header.get_width())/2, 0))
             draw_text('challenge', gen_font(30), (0, 0, 0), screen, 20, 20)
-            pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/wind_and_pad.mp3'), loops=-1)
+
         elif game_state == 'free':
             screen.blit(game_bg, game_bg.get_rect())
             screen.blit(header, ((WIDTH - header.get_width()) / 2, 0))
             draw_text('free play', gen_font(30), (0, 0, 0), screen, 20, 20)
-            pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/wind_and_pad.mp3'), loops=-1)
+
         cursor.update(mouse_pos=pygame.mouse.get_pos())
-        draw_window(game_state)
         collisions = pygame.sprite.spritecollide(cursor, interactables, dokill=False)
+
+        draw_window(game_state)
+
         if len(collisions) > 0:
-            if game_state != 'main' and not cursor_on:
+            if game_state == 'challenge' and not cursor_on and challenge is not None and not challenge.playing:
                 cursor_on = True
-                pygame.mixer.Channel(collisions[0].id).play(pygame.mixer.Sound(collisions[0].sound))
                 num = collisions[0].id
                 pygame.mixer.Channel(num).play(pygame.mixer.Sound(collisions[0].sound))
-
+                if challenge.played_note(num):
+                    challenge.play_next()
+                    score = challenge.score
+                else:
+                    score = challenge.score
+                    # challenge = None
+                    pygame.display.flip()
+            elif game_state == 'free' and not cursor_on:
+                cursor_on = True
+                num = collisions[0].id
+                pygame.mixer.Channel(num).play(pygame.mixer.Sound(collisions[0].sound))
         else:
             cursor_on = False
 
