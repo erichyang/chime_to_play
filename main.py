@@ -15,7 +15,10 @@ def draw_window(chimes):
 
     for chime in chimes:
         screen.blit(chime.img, chime.cords)
-
+        chime.update(pygame.key.get_pressed())
+        chime.draw_chimes(screen)
+    pygame.display.flip()
+    pygame.display.update()
 def main():
     clock = pygame.time.Clock()
     run = True
@@ -26,11 +29,6 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
         draw_window(chimes)
-        for chime in chimes:
-            chime.update(pygame.key.get_pressed())
-            chime.draw_chimes(screen)
-        pygame.display.flip()
-        pygame.display.update()
 
     pygame.quit()
 

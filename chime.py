@@ -1,5 +1,7 @@
 import os
 import pygame
+import random
+import math
 from pygame import K_UP, K_DOWN, K_LEFT, K_RIGHT
 
 
@@ -12,11 +14,11 @@ class Chime(pygame.sprite.Sprite):
         self.cords = [100, 100]
         self.img = pygame.image.load(os.path.join('assets', 'chime1.png'))
 
-        self.width = 10000  # Need width of picture
-        self.height = 10000  # Need height of picture
+        self.width = 10  # Need width of picture
+        self.height = 10  # Need height of picture
         self.mass = 10  # Change based on Chime size
         self.moment_of_inertia = self.mass * (self.width * self.width + self.height * self.height) / 12
-        self.position = (100, 100)
+        self.position = [300, 300]
         self.linear_velocity = 'list'
         self.angle = 0
         self.angular_velocity = 0
@@ -25,8 +27,20 @@ class Chime(pygame.sprite.Sprite):
 
     # Draws all chimes
     def draw_chimes(self, screen):
-        pygame.draw.circle(screen, (0, 0, 255), (300, 300), 20, 2)
-        pygame.draw.circle(screen, (0, 0, 0), (self.position[0], self.position[1]), 20, 1)
+        pygame.draw.rect(screen, (0, 0, 0), (self.position[0]-self.width/2, self.position[1],))
+
+    #Initialize rigid bodies and give random parameters
+    def init_chimes(self,):
+        self.position = (random.randint(50, 750), random.randint(50,750))
+        self.angle = random.randint(0,360)/360 * math.pi * 2
+        self.linear_velocity = [0,0]
+        self.angular_velocity = 0
+
+        self.mass = 10
+        self.width = 10
+        self.height = 10
+        self.moment_of_inertia = self.mass * (self.width * self.width + self.height * self.height) / 12
+
 
     # Move the sprite based on user key presses
     def update(self, pressed_keys):
