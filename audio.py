@@ -28,7 +28,7 @@ def a6():
 
 
 # section 3 is faster
-song_note = [(e6, e6, e6, d6, e6, g6, e6, d6, d6, d6, c6, d6, g6),
+song_note = [(e6, d6, e6, g6, e6, d6, d6, d6, c6, d6, g6),
              (c6, d6, g6, e6, g6, a6, g6, a6, e6, d6, e6, d6, c6),
              (e6, e6, g6, e6, g6, e6, g6, d6, d6, e6, d6, e6, d6,
               e6, d6, g6, d6, e6, g6, e6, e6, g6, d6, c6),

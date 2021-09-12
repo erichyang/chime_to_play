@@ -1,6 +1,6 @@
 import pygame
 
-from audio import c6, Challenge
+from audio import Challenge
 from chime import Chime
 
 WIDTH, HEIGHT = 1200, 900
