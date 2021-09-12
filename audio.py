@@ -40,8 +40,8 @@ num_to_note = [a6, c6, d6, e6, g6]
 
 class Challenge:
     def __init__(self):
-        self.score = 12
-        self.index = 11
+        self.score = 0
+        self.index = 0
         self.length = 0
         self.current = []
         self.playing = False
