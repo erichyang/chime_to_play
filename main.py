@@ -65,7 +65,7 @@ def main():
 
     # main, challenge, free
     game_state = 'main'
-    pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/twinkle_song.mp3'))
+    pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/twinkle_song.mp3'), loops=-1)
     cursor_on = False
     main_bg = pygame.image.load("./assets/main_menu_bg.png")
     game_bg = pygame.image.load("./assets/game_bg.png")
@@ -82,6 +82,7 @@ def main():
                     button_1 = pygame.Rect(WIDTH / 2 - 150, HEIGHT / 2 - 75, 300, 100)
                     button_2 = pygame.Rect(WIDTH / 2 - 150, HEIGHT / 2 + 75, 300, 100)
                     button_3 = pygame.Rect(WIDTH / 2 - 75, HEIGHT / 2 + 225, 150, 75)
+
                     if button_1.collidepoint((mx, my)):
                         game_state = 'challenge'
                         pygame.mixer.stop()
@@ -100,11 +101,13 @@ def main():
                     if button_4.collidepoint((mx, my)):
                         game_state = 'main'
                         # background music in main_menu
-                        pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/twinkle_song.mp3'))
+                        pygame.mixer.Channel(7).play(pygame.mixer.Sound('./assets/audio/twinkle_song.mp3'), loops=-1)
                         continue
 
         if game_state == 'main':
             screen.blit(main_bg, main_bg.get_rect())
+            draw_text('Brought to you by "TEAM SAME" (Sarah, Andrew, Mengting, Eric)', gen_font(30), (0, 0, 0),
+                      screen, 20, HEIGHT - 35)
 
         elif game_state == 'challenge':
             screen.blit(game_bg, game_bg.get_rect())
