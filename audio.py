@@ -56,6 +56,7 @@ class Challenge:
                 self.current = []
                 return False
         self.score += 1
+        self.index += 1
         self.current = []
         if self.score >= 63:
             return False
