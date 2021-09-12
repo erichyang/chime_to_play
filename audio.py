@@ -12,23 +12,23 @@ song_note = [('e6', 'e6', 'e6', 'd6', 'e6', 'g6', 'e6', 'd6', 'd6', 'd6', 'c6', 
 
 def c6():
     pygame.mixer.Channel(0).play(pygame.mixer.Sound(r"./assets/audio/C6.mp3"))
-
+    time.sleep(2.5)
 
 def d6():
     pygame.mixer.Channel(1).play(pygame.mixer.Sound(r"./assets/audio/D6.mp3"))
-
+    time.sleep(2.5)
 
 def e6():
     pygame.mixer.Channel(2).play(pygame.mixer.Sound(r"./assets/audio/E6.mp3"))
-
+    time.sleep(2.5)
 
 def g6():
     pygame.mixer.Channel(3).play(pygame.mixer.Sound(r"./assets/audio/G6.mp3"))
-
+    time.sleep(2.5)
 
 def a6():
     pygame.mixer.Channel(4).play(pygame.mixer.Sound(r"./assets/audio/A6.mp3"))
-
+    time.sleep(2.5)
 
 # from playsound import playsound
 #
