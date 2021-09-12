@@ -40,9 +40,8 @@ num_to_note = [a6, c6, d6, e6, g6]
 
 class Challenge:
     def __init__(self):
-        self.score = 0
-        self.track = 0
-        self.index = 0
+        self.score = 12
+        self.index = 11
         self.length = 0
         self.current = []
         self.playing = False
@@ -57,11 +56,6 @@ class Challenge:
                 self.current = []
                 return False
         self.score += 1
-        if len(song_note[self.track]) == self.index:
-            self.track += 1
-            self.index = 0
-        else:
-            self.index += 1
         self.current = []
         if self.score >= 63:
             return False
@@ -70,27 +64,21 @@ class Challenge:
 
     def play_next(self):
         event = threading.Event()
-        thread = threading.Thread(target=self.loop, args=(event, self.track, self.index))
+        thread = threading.Thread(target=self.loop, args=(event, self.index))
         thread.start()
 
-    def loop(self, event, track, index):
+    def loop(self, event, index):
         self.playing = True
         event.wait(1.5)
-        song = song_note[track]
         wait = 0.9
-        if track == 2:
+        if 26 <= index <= 50:
             wait = 0.45
+
         self.length = 0
-        if track > 0:
-            for m in range(0, track):
-                for note in song_note[m]:
-                    print(note.__name__)
-                    note()
-                    event.wait(0.9)
-                    self.length += 1
-        for note in range(0, index+1):
-            print(song[note].__name__)
-            song[note]()
+        for m in range(0, index+1):
+            note = flattened[m]
+            print(note.__name__)
+            note()
             event.wait(wait)
             self.length += 1
         self.playing = False
