@@ -11,14 +11,17 @@ class Chime(pygame.sprite.Sprite):
 
     def __init__(self):
         super(Chime, self).__init__()
-        self.surf = pygame.Surface((25, 100))
-        self.surf.fill((0, 0, 0))
-        self.cords = [100, 100]
+        self.surf = pygame.Surface((50, 100))
+        self.surf.fill((255, 0, 255))
+        self.surf.set_colorkey((255, 0, 255))
+        self.cords = [250, 500]
         self.img = pygame.image.load(os.path.join('assets', 'chime1.png'))
+        self.width = self.img.get_size()[0]
+        self.height = self.img.get_size()[1]
+        self.mass = self.width * self.height / 100  # Change based on Chime size
 
-        self.width = 10  # Need width of picture
-        self.height = 10  # Need height of picture
-        self.mass = 10  # Change based on Chime size
+        self.rect = pygame.Rect(self.cords[0], self.cords[1], self.width, self.height)
+
         self.moment_of_inertia = self.mass * (self.width * self.width + self.height * self.height) / 12
         self.position = [300, 300]
         self.linear_velocity = 0
@@ -27,14 +30,10 @@ class Chime(pygame.sprite.Sprite):
         self.force = [0, 0]
         self.torque = 0
 
-    # Draws all chimes
-    def draw_chimes(self, screen):
-        pygame.draw.rect(screen, (0, 0, 0), (self.position[0], self.position[1], self.width, self.height))
-
-    #Initialize rigid bodies and give random parameters
+    # Initialize rigid bodies and give random parameters
     def init_chimes(self):
         self.position = [random.randint(50, 750), random.randint(50, 750)]
-        self.angle = random.randint(0, 360)/360 * math.pi * 2
+        self.angle = random.randint(0, 360) / 360 * math.pi * 2
         self.linear_velocity = [0, 0]
         self.angular_velocity = 0
 

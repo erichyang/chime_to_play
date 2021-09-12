@@ -10,34 +10,54 @@ WHITE = (255, 255, 255)
 FPS = 30
 
 
-def draw_window(chimes):
-    screen.fill(WHITE)
+class Cursor(pygame.sprite.Sprite):
 
-    for chime in chimes:
-        screen.blit(chime.img, chime.cords)
-        chime.update(pygame.key.get_pressed())
-        chime.run_sim(screen)
+    def __init__(self):
+        super(Cursor, self).__init__()
+        self.surf = pygame.Surface((100, 100))
+        self.surf.fill((255, 0, 255))
+        self.surf.set_colorkey((255, 0, 255))
+        self.rect = pygame.draw.circle(self.surf, (0, 0, 255), (20, 20), 20, width=2)
 
-    pygame.display.flip()
-    pygame.display.update()
+    def update(self, mouse_pos):
+        self.rect.move_ip(mouse_pos[0] - self.rect.centerx+15, mouse_pos[1] - self.rect.centery+15)
+
 
 def main():
     clock = pygame.time.Clock()
+    pygame.mouse.set_cursor((8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0))
     run = True
-    chime1 = Chime()
-    chime2 = Chime()
-    chime3 = Chime()
-    chime4 = Chime()
-    chime5 = Chime()
-    chimes = [chime1, chime2, chime3, chime4, chime5]
+    chimes = [Chime(), Chime(), Chime(), Chime(), Chime()]
+
+    interactables = pygame.sprite.Group()
+
+    cursor = Cursor()
+
     for chime in chimes:
+        interactables.add(chime)
         chime.init_chimes()
+
+    def draw_window():
+        screen.fill(WHITE)
+
+        for chime in chimes:
+            screen.blit(chime.img, chime.cords)
+            chime.update(pygame.key.get_pressed())
+            chime.run_sim(screen)
+        screen.blit(cursor.surf, cursor.rect)
+
+        pygame.display.flip()
+        pygame.display.update()
+
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-        draw_window(chimes)
+        cursor.update(mouse_pos=pygame.mouse.get_pos())
+        draw_window()
+        if pygame.sprite.spritecollideany(cursor, interactables):
+            print('touching')
 
     pygame.quit()
 
