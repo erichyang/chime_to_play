@@ -1,6 +1,3 @@
-import threading
-import time
-
 import pygame
 
 from audio import c6
@@ -14,6 +11,7 @@ WHITE = (255, 255, 255)
 FPS = 30
 
 pygame.font.init()
+
 
 class Cursor(pygame.sprite.Sprite):
 
@@ -67,7 +65,7 @@ def main():
 
     # main, challenge, free
     game_state = 'main'
-
+    cursor_on = False
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -104,7 +102,9 @@ def main():
         elif game_state == 'challenge':
             screen.fill((0, 0, 0))
             bg = pygame.image.load("./assets/game_bg.png")
+            header = pygame.transform.scale(pygame.image.load('./assets/chime_header.png'), (900, 900))
             screen.blit(bg, bg.get_rect())
+            screen.blit(header, header.get_rect())
             draw_text('challenge', gen_font(30), (0, 0, 0), screen, 20, 20)
         elif game_state == 'free':
             screen.fill((0, 0, 0))
@@ -113,12 +113,12 @@ def main():
             draw_text('free play', gen_font(30), (0, 0, 0), screen, 20, 20)
         cursor.update(mouse_pos=pygame.mouse.get_pos())
         draw_window(game_state)
-        sound_thread = None
         if pygame.sprite.spritecollideany(cursor, interactables):
-            if game_state != 'main' and sound_thread is None:
-                sound_thread = threading.Thread(target=c6, args=())
-                sound_thread.start()
-                sound_thread.join()
+            if game_state != 'main' and not cursor_on:
+                cursor_on = True
+                c6()
+        else:
+            cursor_on = False
 
     pygame.quit()
 

@@ -1,3 +1,4 @@
+import time
 import pygame
 
 pygame.mixer.init(44100, -16, 2, 2048)
@@ -12,7 +13,6 @@ song_note = [('e6', 'e6', 'e6', 'd6', 'e6', 'g6', 'e6', 'd6', 'd6', 'd6', 'c6', 
 
 def c6():
     pygame.mixer.Channel(0).play(pygame.mixer.Sound(r"./assets/audio/C6.mp3"))
-    time.sleep(2.5)
 
 def d6():
     pygame.mixer.Channel(1).play(pygame.mixer.Sound(r"./assets/audio/D6.mp3"))
